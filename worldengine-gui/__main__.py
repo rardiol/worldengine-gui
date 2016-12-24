@@ -203,7 +203,7 @@ class PlatesGeneration(object):
             return True, self.steps
 
     def world(self):
-        world = World(self.name, self.width, self.height, self.seed,
+        world = World(self.name, {"width": self.width, "height": self.height}, self.seed,
                       self.n_plates, self.ocean_level,
                       Step.get_by_name("plates"))
         hm = platec.get_heightmap(self.p)
