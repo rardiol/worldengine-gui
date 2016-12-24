@@ -2,6 +2,7 @@
 """
 PyQt5 GUI Interface for Worldengine
 """
+import PyQt5
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QApplication, QDialog, QMainWindow, QAction, \
     QFileDialog, QLabel, QWidget, QGridLayout, QPushButton, QLineEdit, QSpinBox
@@ -216,10 +217,14 @@ class PlatesGeneration(object):
 class MapCanvas(QImage):
     def __init__(self, label, width, height):
         QImage.__init__(self, width, height, QImage.Format_RGB32)
+        print(self.width())
         self.label = label
         self._update()
 
     def draw_world(self, world, view):
+        print(self.label)
+        print(type(self.label))
+        print(self.width())
         self.label.resize(world.width, world.height)
         if view == 'bw':
             draw_bw_elevation_on_screen(world, self)
@@ -238,7 +243,16 @@ class MapCanvas(QImage):
         self._update()
 
     def _update(self):
+        #self.label.resize(self.size())
+        #self.label.setPixmap(QPixmap.fromImage(self.scaled(self.size(), PyQt5.QtCore.Qt.KeepAspectRatio, PyQt5.QtCore.Qt.SmoothTransformation)))
         self.label.setPixmap(QPixmap.fromImage(self))
+        print("A:")
+        print(self.size())
+        print(self.width())
+        print(self.height())
+        print(self.label.size())
+        print(self.label.width())
+        print(self.label.height())
 
 
 class OperationDialog(QDialog):
@@ -349,8 +363,9 @@ class WorldEngineGui(QMainWindow):
 
     def set_world(self, world):
         self.world = world
-        self.canvas = MapCanvas(self.label, self.world.width,
-                                self.world.height)
+        print(self.width())
+        self.canvas = MapCanvas(self.label, self.width(),
+                                self.height())
         self._on_bw_view()
 
         self.saveproto_action.setEnabled(world is not None)
